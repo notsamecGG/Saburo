@@ -1,37 +1,46 @@
 #include <iostream>
+#include <vector>
 
-#define PRINT_NAME(x) const char* PrintName() override { return x; }
+#include "note.hpp"
 
-struct iCMD
+#define RENDER_LINE() std::cout << "----------------------" << std::endl
+
+struct CMDLine
 {
-    virtual const char* PrintName() = 0;
-    virtual void Execute(const char* input) = 0;
-};
+    std::vector<Note> notes;
 
-struct Add : public iCMD 
-{
-    PRINT_NAME("add");
-
-    void Execute(const char* input) override 
-    { 
-        std::cout << "Add" << std::endl; 
+    void add(std::string input)
+    {
+        notes.push_back(Note(input));
+        COUT("add " << input);
     }
-};
-struct Remove : public iCMD 
-{
-    PRINT_NAME("remove");
 
-    void Execute(const char* input) override 
-    { 
-        std::cout << "Remove" << std::endl; 
+    void rm(std::string input)
+    {
+        unsigned int index = std::stoi(input);
+
+        if (index <= notes.size())
+            notes.erase(notes.begin() + index);
+
+        COUT("remove " << std::stoi(input));
     }
-};
-struct Show : public iCMD 
-{ 
-    PRINT_NAME("show");
 
-    void Execute(const char* input) override 
-    { 
-        std::cout << "Show" << std::endl; 
+    // void finish(std::string input)
+    // {
+    //     std::cout << "finish " << std::stoi(input) << std::endl;
+    // }
+
+    void show(std::vector<Note>& notes)
+    {
+        std::cout << "    MY TODO LIST" << std::endl;
+        RENDER_LINE();
+
+        for (Note note : notes)
+        {
+            std::cout << note.msg() << std::endl;
+            RENDER_LINE();
+        }
+        
+        COUT("show");
     }
 };
