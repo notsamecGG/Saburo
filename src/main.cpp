@@ -10,7 +10,9 @@
 #include <iostream>
 #include <string>
 
-#include "cmds.cpp"
+#include "common.hpp"
+#include "cmds.hpp"
+#include "cmd-line.hpp"
 #include "note.hpp"
 
 
@@ -22,7 +24,7 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    CMDLine cmd;
+    CommandLine cmdl(basic_cmds);
     std::string command(argv[1]);
     //file man1 - reading
     // TODO: file is rewrtien down bellow
@@ -30,27 +32,29 @@ int main(int argc, char** argv)
     std::string line;
 
     while (std::getline(fs, line))
-        cmd.add(line);
+        cmdl.execute("add", std::any(line));
 
     fs.close();
 
     // command resolver
-    if (command.compare("add") == 0)
-        cmd.add(argv[2]);
-    else if (command.compare("rm") == 0)
-        cmd.rm(argv[2]);
-    else if (command.compare("show") == 0)
-        cmd.show(cmd.notes);
-    else
+    try
     {
-        std::cerr << argv[1] << " is not recognized command" << std::endl;
-        return 2;
+        std::string args = "";
+        
+        if (argc >=2)
+            args = argv[2];
+
+        cmdl.execute(argv[1], args);
+    }
+    catch(std::exception e)
+    {
+        std::cerr << e.what() << std::endl;
     }
 
     //file man2 - writing
     fs.open("cache.txt", std::fstream::out /*| std::fstream::app*/);
 
-    for (Note note : cmd.notes)
+    for (Note note : *cmdl.notes())
     {
         COUT(note.msg());
         fs << note.msg() << std::endl;

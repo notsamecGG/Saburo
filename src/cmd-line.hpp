@@ -1,8 +1,5 @@
 #pragma once
 
-#include <algorithm>
-#include <array>
-
 #include "common.hpp"
 #include "cmd.hpp"
 #include "note.hpp"
@@ -31,19 +28,21 @@ public:
             m_cmds.emplace(cmd.name, std::make_shared<Command>(cmd));
     }
 
-    void execute(std::string& cmd_name, std::any& args)
+    void execute(const std::string cmd_name, const std::any args) const
     {
         QuerryResult result = _querry(cmd_name);
 
         if (!result.valid())
             throw "Invalid command";
 
-        Command cmd = (*result.getCommand());
-        cmd.execute(args);
+        Command cmd = *result.getCommand().lock();
+        cmd.execute(args, std::make_shared<std::vector<Note>>(m_notes));
     }
 
+    std::unique_ptr<std::vector<Note>> notes() { return std::make_unique<std::vector<Note>>(m_notes); }
+
 private:
-    QuerryResult _querry(std::string& cmd_name)
+    QuerryResult _querry(const std::string cmd_name) const
     {
         auto cmd = m_cmds.find(cmd_name);
 
