@@ -2,20 +2,19 @@
 
 #include "common.hpp"
 #include "cmd.hpp"
-#include "note.hpp"
 
 
 class QuerryResult
 {
 public:
-    QuerryResult(int code) : m_code(code) { }
-    QuerryResult(int code, std::weak_ptr<Command> cmd) : m_code(code), m_cmd(cmd) { }
+    QuerryResult(const int& code) : m_code(code) { }
+    QuerryResult(const int& code, const std::shared_ptr<Command>& cmd) : m_code(code), m_cmd(cmd) { }
 
-    bool valid() { return (bool)m_code; }
-    std::weak_ptr<Command> getCommand() { return m_cmd; }
+    bool valid() const { return (bool)m_code; }
+    std::shared_ptr<Command> getCommand() const { return m_cmd; }
 
 private:
-    std::weak_ptr<Command> m_cmd;
+    std::shared_ptr<Command> m_cmd;
     int m_code;
 };
 
@@ -24,22 +23,24 @@ class CommandLine
 public:
     CommandLine(std::list<Command> command_list) 
     {
+        m_notes = std::make_unique<std::vector<Note>>();
+
         for (Command cmd : command_list)
             m_cmds.emplace(cmd.name, std::make_shared<Command>(cmd));
     }
 
-    void execute(const std::string cmd_name, const std::any args) const
+    void execute(const std::string &cmd_name, const std::string &args) const
     {
         QuerryResult result = _querry(cmd_name);
 
         if (!result.valid())
             throw "Invalid command";
 
-        Command cmd = *result.getCommand().lock();
-        cmd.execute(args, std::make_shared<std::vector<Note>>(m_notes));
+        Command cmd = *(result.getCommand());
+        cmd.execute(args, m_notes.get());
     }
 
-    std::unique_ptr<std::vector<Note>> notes() { return std::make_unique<std::vector<Note>>(m_notes); }
+    auto notes() { return m_notes.get(); }
 
 private:
     QuerryResult _querry(const std::string cmd_name) const
@@ -49,10 +50,12 @@ private:
         if (cmd == m_cmds.end())
             return QuerryResult(0);
 
-        return QuerryResult(1, std::make_shared<Command>(*cmd));
+        auto x = *cmd;
+
+        return QuerryResult(1, cmd->second);
     }
 
 private:
-    std::vector<Note> m_notes;
-    std::unordered_map<std::string, std::weak_ptr<Command>> m_cmds;
+    std::unique_ptr<std::vector<Note>> m_notes;
+    std::unordered_map<std::string, std::shared_ptr<Command>> m_cmds;
 };

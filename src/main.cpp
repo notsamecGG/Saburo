@@ -13,7 +13,6 @@
 #include "common.hpp"
 #include "cmds.hpp"
 #include "cmd-line.hpp"
-#include "note.hpp"
 
 
 int main(int argc, char** argv)
@@ -32,7 +31,7 @@ int main(int argc, char** argv)
     std::string line;
 
     while (std::getline(fs, line))
-        cmdl.execute("add", std::any(line));
+        cmdl.execute(std::string("add"), line);
 
     fs.close();
 
@@ -41,10 +40,11 @@ int main(int argc, char** argv)
     {
         std::string args = "";
         
-        if (argc >=2)
-            args = argv[2];
+        if (argc >=3)
+            args.assign(argv[2]);
 
-        cmdl.execute(argv[1], args);
+        cmdl.execute(std::string(argv[1]), args);
+        cmdl.execute(std::string(argv[1]), args);
     }
     catch(std::exception e)
     {
@@ -56,7 +56,7 @@ int main(int argc, char** argv)
 
     for (Note note : *cmdl.notes())
     {
-        COUT(note.msg());
+        // COUT(note.msg());
         fs << note.msg() << std::endl;
     }
 

@@ -8,4 +8,6 @@
 #include <memory>
 #include <unordered_map>
 
-using namespace std::string_literals;
+#include "note.hpp"
+
+// using namespace std::string_literals;
