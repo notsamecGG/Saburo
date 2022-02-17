@@ -6,6 +6,11 @@
 #define RENDER_LINE() std::cout << "----------------------" << std::endl
 
 
+/**
+ * @brief check if argument string isn't empty
+ * 
+ * @param str - argument string
+ */
 void emptyCheck(std::string& str)
 {
     if (str.empty())
@@ -14,6 +19,10 @@ void emptyCheck(std::string& str)
     }
 }
 
+/**
+ * @brief list of basic commands
+ * 
+ */
 const std::list<Command> basic_cmds =
 {
     Command(std::string("add"), [](std::string args, std::vector<Note>* notes)

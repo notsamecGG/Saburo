@@ -1,7 +1,10 @@
 #pragma once
 #include <string>
 
-
+/**
+ * @brief Struct for saving note data
+ * 
+ */
 struct Note
 {
 public:
