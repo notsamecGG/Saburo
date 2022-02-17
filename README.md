@@ -1,10 +1,10 @@
 # Simple C++ ToDo list terminal app
 
 ## Use:
-from saburo/bin you can call following:
-    - `__main__ add "(txt)"` - add new note with _txt_ 
-    - `__main__ rm (index)` - remove note at _index_
-    - `__main__ show` - show all notes
+From `saburo/bin` you can call following:
+- `__main__ add "(txt)"` - add new note with _txt_ 
+- `__main__ rm (index)` - remove note at _index_
+- `__main__ show` - show all notes
 
 
 ## Code: 
