@@ -1,10 +1,7 @@
 #include <fstream>
 #include <iostream>
-#include <string>
 
-#include "common.hpp"
-#include "cmds.hpp"
-#include "cmd-line.hpp"
+#include "core/all.hpp"
 
 
 int main(int argc, char** argv)
@@ -15,7 +12,7 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    CommandLine cmdl(basic_cmds);
+    gg::ui::terminal::CommandLine cmdl(gg::ui::terminal::todo::basic_cmds);
     std::string command(argv[1]);
     //file man1 - reading
     // TODO: file is rewrtien down bellow
@@ -40,6 +37,7 @@ int main(int argc, char** argv)
     catch(std::invalid_argument e)
     {
         std::cerr << e.what() << std::endl;
+        return 1;
     }
 
     //file man2 - writing
@@ -52,4 +50,5 @@ int main(int argc, char** argv)
     }
 
     fs.close();
+    return 0;
 }

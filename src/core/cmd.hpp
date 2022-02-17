@@ -3,13 +3,13 @@
 #include "common.hpp"
 
 
-// typedef std::tuple<int, std::string> arg_t;
-typedef std::function<void(std::string, std::vector<Note>*)> callback_t;
-
+namespace gg::ui::terminal
+{
 /**
  * @brief Basic prefab from whom other (custom) commands should be derived
  * 
  */
+template<typename T>
 struct Command
 {
     std::string name;
@@ -29,9 +29,11 @@ public:
      * @param args - string of argument/s
      * @param notes - pointer to vector of Notes
      */
-    void execute(const std::string args, std::vector<Note>* notes) { m_callback(args, notes); }
+    void execute(const std::string args, std::vector<T>* notes) { m_callback(args, notes); }
 
 private:
     callback_t m_callback;
-};
 
+    typedef std::function<void(std::string, std::vector<T>*)> callback_t;
+};
+}

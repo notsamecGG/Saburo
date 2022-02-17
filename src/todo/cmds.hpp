@@ -6,6 +6,8 @@
 #define RENDER_LINE() std::cout << "----------------------" << std::endl
 
 
+namespace gg::ui::terminal::todo
+{
 /**
  * @brief check if argument string isn't empty
  * 
@@ -30,8 +32,6 @@ const std::list<Command> basic_cmds =
         emptyCheck(args);
 
         notes->emplace_back(Note(args));
-
-        std::cout << "Added" << std::endl;
     }),
     Command(std::string("rm"), [](std::string args, std::vector<Note>* notes)
     {
@@ -39,8 +39,6 @@ const std::list<Command> basic_cmds =
 
         int index = std::stoi(args);
         notes->erase(notes->begin() + index);
-
-        std::cout << "Removed" << std::endl;
     }),
     Command(std::string("show"), [](std::string args, std::vector<Note>* notes)
     {
@@ -55,3 +53,4 @@ const std::list<Command> basic_cmds =
         }
     })
 };
+}

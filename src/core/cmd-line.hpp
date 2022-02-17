@@ -4,14 +4,17 @@
 #include "cmd.hpp"
 
 
+namespace gg::ui::terminal
+{
 /**
  * @brief Stores pointer to command and bool if the action was successful \n valid(), getCommand()
  */
+template<typename T>
 class QuerryResult
 {
 public:
     QuerryResult(const int& code) : m_code(code) { }
-    QuerryResult(const int& code, const std::shared_ptr<Command>& cmd) : m_code(code), m_cmd(cmd) { }
+    QuerryResult(const int& code, const std::shared_ptr<Command<T>>& cmd) : m_code(code), m_cmd(cmd) { }
 
     /**
      * @brief Check if querry is valid
@@ -20,16 +23,17 @@ public:
     /**
      * @brief Access the command ptr
      */
-    std::shared_ptr<Command> getCommand() const { return m_cmd; }
+    std::shared_ptr<Command<T>> getCommand() const { return m_cmd; }
 
 private:
-    std::shared_ptr<Command> m_cmd;
+    std::shared_ptr<Command<T>> m_cmd;
     int m_code;
 };
 
 /**
  * @brief Serves for command managing (queriyng, linking, ...) and stores notes
  */
+template<typename T>
 class CommandLine
 {
 public:
@@ -38,12 +42,12 @@ public:
      * 
      * @param command_list - list of commands which will be search against every time program is called
      */
-    CommandLine(std::list<Command> command_list) 
+    CommandLine(std::list<Command<T>> command_list) 
     {
-        m_notes = std::make_unique<std::vector<Note>>();
+        m_notes = std::make_unique<std::vector<T>>();
 
         for (Command cmd : command_list)
-            m_cmds.emplace(cmd.name, std::make_shared<Command>(cmd));
+            m_cmds.emplace(cmd.name, std::make_shared<Command<T>>(cmd));
     }
 
     /**
@@ -90,6 +94,7 @@ private:
     }
 
 private:
-    std::unique_ptr<std::vector<Note>> m_notes;
-    std::unordered_map<std::string, std::shared_ptr<Command>> m_cmds;
+    std::unique_ptr<std::vector<T>> m_notes;
+    std::unordered_map<std::string, std::shared_ptr<Command<T>>> m_cmds;
 };
+}
