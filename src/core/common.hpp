@@ -1,6 +1,6 @@
 #pragma once
 
-// #include <any>
+#include <any>
 #include <functional>
 #include <iostream>
 #include <list>
@@ -8,7 +8,5 @@
 #include <string>
 #include <memory>
 #include <unordered_map>
-
-#include "note.hpp"
 
 // using namespace std::string_literals;

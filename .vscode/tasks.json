@@ -8,6 +8,7 @@
                 "-fdiagnostics-color=always",
                 "-std=gnu++2a",
                 "-g",
+                "-I ${workspaceFolder}/",
                 "${file}",
                 "-o",
                 "${workspaceFolder}/bin/${fileBasenameNoExtension}"

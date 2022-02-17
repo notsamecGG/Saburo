@@ -1,7 +1,9 @@
 #pragma once
 
-#include "common.hpp"
-#include "cmd.hpp"
+#include "../core/common.hpp"
+#include "../core/cmd.hpp"
+
+#include "args.hpp"
 
 #define RENDER_LINE() std::cout << "----------------------" << std::endl
 
@@ -21,32 +23,33 @@ void emptyCheck(std::string& str)
     }
 }
 
+typedef Command<Args> TodoCommand;
+
 /**
  * @brief list of basic commands
  * 
  */
-const std::list<Command> basic_cmds =
+const std::list<TodoCommand> basic_cmds =
 {
-    Command(std::string("add"), [](std::string args, std::vector<Note>* notes)
+    TodoCommand(std::string("add"), [](Args args)
     { 
-        emptyCheck(args);
+        emptyCheck(args.string);
 
-        notes->emplace_back(Note(args));
+        args.notes->push_back(Note(args.string));
     }),
-    Command(std::string("rm"), [](std::string args, std::vector<Note>* notes)
+    TodoCommand(std::string("rm"), [](Args args)
     {
-        emptyCheck(args);
+        emptyCheck(args.string);
 
-        int index = std::stoi(args);
-        notes->erase(notes->begin() + index);
+        int index = std::stoi(args.string);
+        args.notes->erase(args.notes->begin() + index);
     }),
-    Command(std::string("show"), [](std::string args, std::vector<Note>* notes)
+    TodoCommand(std::string("show"), [](Args args)
     {
-
         std::cout << "    MY TODO LIST" << std::endl;
         RENDER_LINE();
 
-        for (Note note : *notes)
+        for (Note note : *args.notes)
         {
             std::cout << note.msg() << std::endl;
             RENDER_LINE();

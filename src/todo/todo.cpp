@@ -1,7 +1,9 @@
 #include <fstream>
 #include <iostream>
 
-#include "core/all.hpp"
+#include "cmds.hpp"
+#include "args.hpp"
+#include "../core/cmd-line.hpp"
 
 
 int main(int argc, char** argv)
@@ -12,6 +14,8 @@ int main(int argc, char** argv)
         return 1;
     }
 
+    std::unique_ptr<std::vector<Note>> notes = std::make_unique<std::vector<Note>>();
+
     gg::ui::terminal::CommandLine cmdl(gg::ui::terminal::todo::basic_cmds);
     std::string command(argv[1]);
     //file man1 - reading
@@ -20,7 +24,7 @@ int main(int argc, char** argv)
     std::string line;
 
     while (std::getline(fs, line))
-        cmdl.execute(std::string("add"), line);
+        cmdl.execute(std::string("add"), Args(line, notes.get()));
 
     fs.close();
 
@@ -32,7 +36,7 @@ int main(int argc, char** argv)
         if (argc >=3)
             args.assign(argv[2]);
 
-        cmdl.execute(std::string(argv[1]), args);
+        cmdl.execute(std::string(argv[1]), Args(args, notes.get()));
     }
     catch(std::invalid_argument e)
     {
@@ -43,7 +47,7 @@ int main(int argc, char** argv)
     //file man2 - writing
     fs.open("cache.txt", std::fstream::out /*| std::fstream::app*/);
 
-    for (Note note : *cmdl.notes())
+    for (Note note : *notes)
     {
         // COUT(note.msg());
         fs << note.msg() << std::endl;

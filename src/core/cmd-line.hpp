@@ -9,12 +9,12 @@ namespace gg::ui::terminal
 /**
  * @brief Stores pointer to command and bool if the action was successful \n valid(), getCommand()
  */
-template<typename T>
+template<typename Args>
 class QuerryResult
 {
 public:
     QuerryResult(const int& code) : m_code(code) { }
-    QuerryResult(const int& code, const std::shared_ptr<Command<T>>& cmd) : m_code(code), m_cmd(cmd) { }
+    QuerryResult(const int& code, const std::shared_ptr<Command<Args>>& cmd) : m_code(code), m_cmd(cmd) { }
 
     /**
      * @brief Check if querry is valid
@@ -23,17 +23,17 @@ public:
     /**
      * @brief Access the command ptr
      */
-    std::shared_ptr<Command<T>> getCommand() const { return m_cmd; }
+    std::shared_ptr<Command<Args>> getCommand() const { return m_cmd; }
 
 private:
-    std::shared_ptr<Command<T>> m_cmd;
+    std::shared_ptr<Command<Args>> m_cmd;
     int m_code;
 };
 
 /**
  * @brief Serves for command managing (queriyng, linking, ...) and stores notes
  */
-template<typename T>
+template<typename Args>
 class CommandLine
 {
 public:
@@ -42,12 +42,10 @@ public:
      * 
      * @param command_list - list of commands which will be search against every time program is called
      */
-    CommandLine(std::list<Command<T>> command_list) 
+    CommandLine(std::list<Command<Args>> command_list) 
     {
-        m_notes = std::make_unique<std::vector<T>>();
-
         for (Command cmd : command_list)
-            m_cmds.emplace(cmd.name, std::make_shared<Command<T>>(cmd));
+            m_cmds.emplace(cmd.name, std::make_shared<Command<Args>>(cmd));
     }
 
     /**
@@ -56,23 +54,16 @@ public:
      * @param cmd_name - (string) name of command
      * @param args - argument string
      */
-    void execute(const std::string &cmd_name, const std::string &args) const
+    void execute(const std::string &cmd_name, const Args &args) const
     {
-        QuerryResult result = _querry(cmd_name);
+        QuerryResult<Args> result = _querry(cmd_name);
 
         if (!result.valid())
             throw std::invalid_argument("Invalid command");
 
         Command cmd = *(result.getCommand());
-        cmd.execute(args, m_notes.get());
+        cmd.execute(args);
     }
-
-    /**
-     * @brief Retrieve notes
-     * 
-     * @return pointer to Note vector
-     */
-    auto notes() { return m_notes.get(); }
 
 private:
     /**
@@ -81,12 +72,12 @@ private:
      * @param cmd_name - command name
      * @return QuerryResult 
      */
-    QuerryResult _querry(const std::string cmd_name) const
+    QuerryResult<Args> _querry(const std::string cmd_name) const
     {
         auto cmd = m_cmds.find(cmd_name);
 
         if (cmd == m_cmds.end())
-            return QuerryResult(0);
+            return QuerryResult<Args>(0);
 
         auto x = *cmd;
 
@@ -94,7 +85,6 @@ private:
     }
 
 private:
-    std::unique_ptr<std::vector<T>> m_notes;
-    std::unordered_map<std::string, std::shared_ptr<Command<T>>> m_cmds;
+    std::unordered_map<std::string, std::shared_ptr<Command<Args>>> m_cmds;
 };
 }
