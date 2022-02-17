@@ -34,7 +34,7 @@ public:
         QuerryResult result = _querry(cmd_name);
 
         if (!result.valid())
-            throw "Invalid command";
+            throw std::invalid_argument("Invalid command");
 
         Command cmd = *(result.getCommand());
         cmd.execute(args, m_notes.get());

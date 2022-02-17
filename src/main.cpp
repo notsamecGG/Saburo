@@ -1,11 +1,3 @@
-#define DEBUG false
-
-#if DEBUG
-#define COUT(x) std::cout << x << std::endl
-#else
-#define COUT(x)
-#endif
-
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -44,9 +36,8 @@ int main(int argc, char** argv)
             args.assign(argv[2]);
 
         cmdl.execute(std::string(argv[1]), args);
-        cmdl.execute(std::string(argv[1]), args);
     }
-    catch(std::exception e)
+    catch(std::invalid_argument e)
     {
         std::cerr << e.what() << std::endl;
     }
@@ -61,6 +52,4 @@ int main(int argc, char** argv)
     }
 
     fs.close();
-
-    COUT("end");
 }
