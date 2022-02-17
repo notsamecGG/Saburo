@@ -5,6 +5,8 @@
 #include "args.hpp"
 #include "../core/cmd-line.hpp"
 
+#define FILE "todo-cache.txt"
+
 
 int main(int argc, char** argv)
 {
@@ -20,7 +22,7 @@ int main(int argc, char** argv)
     std::string command(argv[1]);
     //file man1 - reading
     // TODO: file is rewrtien down bellow
-    std::fstream fs("cache.txt", std::fstream::in);
+    std::fstream fs(FILE, std::fstream::in);
     std::string line;
 
     while (std::getline(fs, line))
@@ -45,7 +47,7 @@ int main(int argc, char** argv)
     }
 
     //file man2 - writing
-    fs.open("cache.txt", std::fstream::out /*| std::fstream::app*/);
+    fs.open(FILE, std::fstream::out /*| std::fstream::app*/);
 
     for (Note note : *notes)
     {

@@ -5,7 +5,7 @@
  * @brief Struct for saving note data
  * 
  */
-struct Note
+class Note
 {
 public:
     Note(std::string& msg) { m_msg = msg; }
