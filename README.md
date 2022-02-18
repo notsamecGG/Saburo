@@ -1,6 +1,6 @@
 # Simple C++ UI terminal app
 
-TODO: command arguments
+TODO: propper terminal UI, file management
 
 This is simple ui terminal engine, aka command handler. See __todo__ app and __etracker__ examples
 

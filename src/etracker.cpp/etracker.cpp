@@ -1,5 +1,6 @@
 #include <fstream>
 #include <iostream>
+#include <sstream>
 
 #include "cmds.hpp"
 #include "args.hpp"
@@ -20,6 +21,25 @@ int main(int argc, char** argv)
 
     gg::ui::terminal::CommandLine cmdl(gg::ui::terminal::etracker::basic_cmds);
     std::string command(argv[1]);
+    //file man1 - reading
+    // TODO: file is rewrtien down bellow
+    std::fstream fs(FILE, std::fstream::in);
+    std::string line;
+    std::stringstream ss;
+
+    int cost;
+    std::string note;
+
+    while (std::getline(fs, line))
+    {
+        ss = std::stringstream(line);
+
+        ss >> cost >> note;
+
+        notes->push_back(Note(cost, note));
+    }
+
+    fs.close();
 
     // command resolver
     try
@@ -37,7 +57,15 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    // No file support :), so.... it's pointless
+    //file man2 - writing
+    fs.open(FILE, std::fstream::out /*| std::fstream::app*/);
 
+    for (Note note : *notes)
+    {
+        // COUT(note.msg());
+        fs << note.cost() << " " << note.msg() << std::endl;
+    }
+
+    fs.close();
     return 0;
 }

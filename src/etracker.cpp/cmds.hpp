@@ -23,11 +23,11 @@ const std::list<ExpenseCommand> basic_cmds =
         std::cout << "What was the cost? \n>>" << std::flush;
         std::cin >> cost;
 
-        if(!args.string.empty())
-        {
-            std::cout << "Please type down your expense note. \n>> " << std::flush;
-            std::cin >> note; 
-        }
+        // if(!args.string.empty())
+        // {
+        std::cout << "Please type down your expense note. \n>> " << std::flush;
+        std::cin >> note; 
+        // }
 
         args.notes->push_back(Note(std::stoi(cost), note));
     }),
