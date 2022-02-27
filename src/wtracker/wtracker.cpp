@@ -6,7 +6,7 @@
 #include "args.hpp"
 #include "../core/cmd-line.hpp"
 
-#define FILE "etracker-cache.txt"
+#define FILE "cache/wtracker-cache.txt"
 
 
 int main(int argc, char** argv)
@@ -27,16 +27,20 @@ int main(int argc, char** argv)
     std::string line;
     std::stringstream ss;
 
-    int cost;
-    std::string note;
+    std::string weight;
+    std::string date;
 
     while (std::getline(fs, line))
     {
+        if(line.empty())
+            break;
+
         ss = std::stringstream(line);
 
-        ss >> cost >> note;
+        std::getline(ss, weight, ';');
+        std::getline(ss, date);
 
-        notes->push_back(Note(cost, note));
+        notes->push_back(Note(std::stoi(weight), date));
     }
 
     fs.close();
@@ -46,7 +50,7 @@ int main(int argc, char** argv)
     {
         std::string args = "";
         
-        if (argc >=3)
+        if (argc >= 3)
             args.assign(argv[2]);
 
         cmdl.execute(std::string(argv[1]), Args(args, notes.get()));
@@ -63,7 +67,7 @@ int main(int argc, char** argv)
     for (Note note : *notes)
     {
         // COUT(note.msg());
-        fs << note.cost() << " " << note.msg() << std::endl;
+        fs << note.weight() << ";" << note.date() << std::endl;
     }
 
     fs.close();

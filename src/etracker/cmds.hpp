@@ -31,22 +31,26 @@ const std::list<ExpenseCommand> basic_cmds =
 
         args.notes->push_back(Note(std::stoi(cost), note));
     }),
-    // ExpenseCommand(std::string("rm"), [](Args args)
-    // {
-    //     int index = std::stoi(args.string);
-    //     args.notes->erase(args.notes->begin() + index);
-    // }),
     ExpenseCommand(std::string("show"), [](Args args)
     {
         std::cout << "    Expense tracker" << std::endl;
         RENDER_LINE();
         RENDER_LINE();
 
+        int sum(0);
+
         for (Note note : *args.notes)
         {
             std::cout << note.cost() << "|" << note.msg() << std::endl;
+            
+            sum += note.cost();
+            
             RENDER_LINE();
         }
+
+        RENDER_LINE();
+
+        std::cout << "SUM: " << sum << std::endl;
     })
 };
 }
