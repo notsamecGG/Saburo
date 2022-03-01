@@ -3,7 +3,8 @@
 #include <sstream>
 
 #include "cmds.hpp"
-#include "args.hpp"
+#include "note.hpp"
+#include "../core/args.hpp"
 #include "../core/cmd-line.hpp"
 
 #define FILE "cache/etracker-cache.txt"

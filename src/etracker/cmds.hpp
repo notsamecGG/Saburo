@@ -1,21 +1,23 @@
 #pragma once
 
+#include "note.hpp"
+#include "../core/args.hpp"
 #include "../core/common.hpp"
 #include "../core/cmd.hpp"
 
-#include "args.hpp"
 
 #define RENDER_LINE() std::cout << "----------------------" << std::endl
 
 
 namespace gg::ui::terminal::etracker
 {
-typedef Command<Args> ExpenseCommand;
+typedef Args<Note> ExpenseArgs;
+typedef Command<ExpenseArgs> ExpenseCommand;
 
 
 const std::list<ExpenseCommand> basic_cmds =
 {
-    ExpenseCommand(std::string("add"), [](Args args)
+    ExpenseCommand(std::string("add"), [](ExpenseArgs args)
     { 
         std::string cost("");
         std::string note("");
@@ -31,7 +33,7 @@ const std::list<ExpenseCommand> basic_cmds =
 
         args.notes->push_back(Note(std::stoi(cost), note));
     }),
-    ExpenseCommand(std::string("show"), [](Args args)
+    ExpenseCommand(std::string("show"), [](ExpenseArgs args)
     {
         std::cout << "    Expense tracker" << std::endl;
         RENDER_LINE();

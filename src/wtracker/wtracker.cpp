@@ -3,7 +3,7 @@
 #include <sstream>
 
 #include "cmds.hpp"
-#include "args.hpp"
+#include "note.hpp"
 #include "../core/cmd-line.hpp"
 
 #define FILE "cache/wtracker-cache.txt"

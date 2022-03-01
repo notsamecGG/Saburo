@@ -1,21 +1,22 @@
 #pragma once
 
+#include "note.hpp"
+#include "../core/args.hpp"
 #include "../core/common.hpp"
 #include "../core/cmd.hpp"
-
-#include "args.hpp"
 
 #define RENDER_LINE() std::cout << "----------------------" << std::endl
 
 
 namespace gg::ui::terminal::etracker
 {
-typedef Command<Args> WeightCommand;
+typedef Args<Note> WArgs;
+typedef Command<WArgs> WeightCommand;
 
 
 const std::list<WeightCommand> basic_cmds =
 {
-    WeightCommand(std::string("add"), [](Args args)
+    WeightCommand(std::string("add"), [](WArgs args)
     { 
         std::string weight("");
 
@@ -24,7 +25,7 @@ const std::list<WeightCommand> basic_cmds =
 
         args.notes->push_back(Note(std::stoi(weight)));
     }),
-    WeightCommand(std::string("show"), [](Args args)
+    WeightCommand(std::string("show"), [](WArgs args)
     {
         std::cout << "    Weight tracker" << std::endl;
         RENDER_LINE();

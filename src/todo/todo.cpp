@@ -2,7 +2,8 @@
 #include <iostream>
 
 #include "cmds.hpp"
-#include "args.hpp"
+#include "note.hpp"
+#include "../core/args.hpp"
 #include "../core/cmd-line.hpp"
 
 #define FILE "cache/todo-cache.txt"
