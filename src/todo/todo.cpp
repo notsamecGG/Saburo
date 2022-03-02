@@ -2,7 +2,6 @@
 #include <iostream>
 
 #include "cmds.hpp"
-#include "note.hpp"
 #include "../core/args.hpp"
 #include "../core/cmd-line.hpp"
 
@@ -17,7 +16,7 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    std::unique_ptr<std::vector<Note>> notes = std::make_unique<std::vector<Note>>();
+    std::unique_ptr<std::vector<INote>> notes = std::make_unique<std::vector<INote>>();
 
     gg::ui::terminal::CommandLine cmdl(gg::ui::terminal::todo::basic_cmds);
     std::string command(argv[1]);
@@ -50,7 +49,7 @@ int main(int argc, char** argv)
     //file man2 - writing
     fs.open(FILE, std::fstream::out /*| std::fstream::app*/);
 
-    for (Note note : *notes)
+    for (INote note : *notes)
     {
         // COUT(note.msg());
         fs << note.msg() << std::endl;

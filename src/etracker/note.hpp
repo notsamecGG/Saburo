@@ -1,11 +1,14 @@
 #pragma once
 #include <string>
 
+#include "../core/inote.hpp"
+
+
 /**
  * @brief Storage object
  * 
  */
-class Note
+class Note : public INote
 {
 public:
     Note(const int& cost, const std::string& msg) : m_cost(cost), m_msg(msg) { }

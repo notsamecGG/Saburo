@@ -1,9 +1,9 @@
 #pragma once
 
-#include "note.hpp"
 #include "../core/args.hpp" 
 #include "../core/common.hpp"
 #include "../core/cmd.hpp"
+#include "../core/inote.hpp"
 
 #define RENDER_LINE() std::cout << "----------------------" << std::endl
 
@@ -23,7 +23,7 @@ void emptyCheck(std::string& str)
     }
 }
 
-typedef Args<Note> TodoArgs;
+typedef Args<INote> TodoArgs;
 typedef Command<TodoArgs> TodoCommand;
 
 /**
@@ -36,7 +36,7 @@ const std::list<TodoCommand> basic_cmds =
     { 
         emptyCheck(args.string);
 
-        args.notes->push_back(Note(args.string));
+        args.notes->push_back(INote(args.string));
     }),
     TodoCommand(std::string("rm"), [](TodoArgs args)
     {
@@ -50,7 +50,7 @@ const std::list<TodoCommand> basic_cmds =
         std::cout << "    MY TODO LIST" << std::endl;
         RENDER_LINE();
 
-        for (Note note : *args.notes)
+        for (INote note : *args.notes)
         {
             std::cout << note.msg() << std::endl;
             RENDER_LINE();

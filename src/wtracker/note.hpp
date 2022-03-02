@@ -3,6 +3,8 @@
 #include <chrono>
 #include <ctime>
 
+#include "../core/inote.hpp"
+
 
 std::time_t get_now()
 {
@@ -13,7 +15,7 @@ std::time_t get_now()
  * @brief Storage object
  * 
  */
-class Note
+class Note : public INote 
 {
 public:
     Note(const int& weight) : m_weight(weight) 

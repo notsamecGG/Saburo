@@ -1,14 +1,17 @@
 #pragma once
 #include <string>
 
+#include "../core/inote.hpp"
+
+
 /**
- * @brief Struct for saving note data
+ * @brief Storage object
  * 
  */
-class Note
+class Note : public INote
 {
 public:
-    Note(std::string& msg) { m_msg = msg; }
+    Note(const std::string& msg) : m_msg(msg) { }
 
     std::string msg() { return m_msg; }
 
